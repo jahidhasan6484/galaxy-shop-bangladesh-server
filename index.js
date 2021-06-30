@@ -12,7 +12,7 @@ const uri = `mongodb+srv://${process.env.DB_User}:${process.env.DB_Pass}@cluster
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static("blog"));
+app.use(express.static("phone"));
 app.use(fileUpload());
 
 const serviceAccount = require("./ServiceAccount/galaxy-shop-bangladesh-firebase-adminsdk-3q1aj-7e853996a6.json");
@@ -29,7 +29,7 @@ const client = new MongoClient(uri, {
 });
 client.connect((err) => {
   const adminCollection = client.db("galaxyShopBangladesh").collection("addAdmin");
-//   const blogsCollection = client.db("blogs").collection("addBlog");
+  const phoneCollection = client.db("galaxyShopBangladesh").collection("addPhone");
 
   //Add Admin
   app.post("/addAdmin", (req, res) => {
@@ -50,36 +50,38 @@ client.connect((err) => {
 //   })
 
 
-  //Add Blogs
-//   app.post("/addABlog", (req, res) => {
-//     const file = req.files.file;
-//     const title = req.body.title;
-//     const content = req.body.content;
-//     const date = req.body.date;
-//     const newImg = file.data;
-//     const encImg = newImg.toString("base64");
+  //Add Phone
+  app.post("/addAPhone", (req, res) => {
+    const file = req.files.file;
+    const category = req.body.category;
+    const model = req.body.model;
+    const previousPrice = req.body.previousPrice;
+    const presentPrice = req.body.presentPrice;
+    const productStatus = req.body.productStatus;
+    const newImg = file.data;
+    const encImg = newImg.toString("base64");
 
-//     var image = {
-//       contentType: file.mimetype,
-//       size: file.size,
-//       img: Buffer.from(encImg, "base64"),
-//     };
+    var image = {
+      contentType: file.mimetype,
+      size: file.size,
+      img: Buffer.from(encImg, "base64"),
+    };
 
-//     blogsCollection
-//       .insertOne({ title, content, date, image })
-//       .then((result) => {
-//         res.send(result.insertedCount > 0);
-//       });
-//   });
+    phoneCollection
+      .insertOne({ category, model, previousPrice,presentPrice, productStatus, image })
+      .then((result) => {
+        res.send(result.insertedCount > 0);
+      });
+  });
 
 
 
-  //Get Blogs
-//   app.get("/blogs", (req, res) => {
-//     blogsCollection.find({}).toArray((err, documents) => {
-//       res.send(documents);
-//     });
-//   });
+  // Get Phone
+  app.get("/phone", (req, res) => {
+    phoneCollection.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
 
   //Delete Blog
 //   app.delete('/delete/:id', (req, res) => {
