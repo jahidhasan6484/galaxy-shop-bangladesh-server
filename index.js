@@ -28,27 +28,7 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
 });
 client.connect((err) => {
-  const adminCollection = client.db("galaxyShopBangladesh").collection("addAdmin");
   const phoneCollection = client.db("galaxyShopBangladesh").collection("addPhone");
-
-  //Add Admin
-  app.post("/addAdmin", (req, res) => {
-    const newAdmin = req.body;
-    adminCollection.insertOne(newAdmin).then((result) => {
-      res.send(result.insertedCount > 0);
-    });
-  });
-
-
-  //Check Admin or not
-//   app.post('/isAdmin', (req, res) => {
-//     const email = req.body.email;
-//     adminCollection.find({ email: email })
-//       .toArray((err, doctors) => {
-//         res.send(doctors.length > 0);
-//       })
-//   })
-
 
   //Add Phone
   app.post("/addAPhone", (req, res) => {
@@ -82,15 +62,6 @@ client.connect((err) => {
       res.send(documents);
     });
   });
-
-  //Delete Blog
-//   app.delete('/delete/:id', (req, res) => {
-//     console.log(req.params.id);
-//     blogsCollection.deleteOne({ _id: ObjectId(req.params.id) })
-//       .then(result => {
-//         res.send(result.deletedCount > 0);
-//       });
-//   });
 
 
 });
